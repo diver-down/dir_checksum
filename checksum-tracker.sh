@@ -1,39 +1,60 @@
 #!/bin/bash
 #
-# Directory checksum script
+# checksum-tracker is a directory verification script
 #
-# It computes md5sum of all files in one directory
-# recursively and saved to a checksum file under it.
-# Subsequent execution on that directory will compare
-# last checksum with current one and report missed/
-# added/modified files.
+# AUTHORS:
+# This forked version and modifications are by diver-down.
+#
+# Original credit goes to Mark Kuo (starryalley@gmail.com),
+# found at https://github.com/starryalley/dir_checksum
 #
 # =======================================
 #
-# Author: Mark Kuo (starryalley@gmail.com)
-# Date:   2013.3.20
+# INSTRUCTIONS:
+# This script is designed to be simple and portable.
+# 
+# Simply place a copy of checksum-tracker.sh in the 
+# top/root level of any project folder or external drive.
 #
+# Then, allow execution with chmod +X checksum-tracker.sh
+# 
+# To use, simply navigate your CLI/Terminal to the project
+# folder, and then execute locally with ./checksum-tracker.sh
+# 
+# On the first run, this script will compute an md5 checksum
+# of all files in that directory recursively and save the 
+# results to a checksum file titled .dir_checksum
 #
+# Subsequent executions on that directory will compare
+# last checksum with current one, update the records, 
+# and then report missing, added, and modified files.
+# Additionally, a copy of the previous checksum data is 
+# saved to .dir_checksum.old for backup purposes.
 #
-# Original Requirements:
+# =======================================
 #
-# 可以把所有的hash data都放在一個文字檔案裡面
-# 在檔案名稱永遠相同的前提之下
-# 程式提式的訊息基本上只需要
-# 1 match
-# 2 modified
-# 3 disappeared
+# PORTABILITY:
+# One of the main modifications of this script, compared
+# to the original source, is that all records are stored
+# as relative paths. This means that this script should
+# be located at the top/root directory of any project
+# or drive, and that it is now completely portable between
+# users and systems.
 #
+# =======================================
 #
-# Dependent commands:
+# Dependencies:
 #  md5sum/md5, diff, comm, xargs, find, sort
 #  grep, sed, rm, mv, wc, cut, uniq
 #
-# Optional commands:
+# Optional:
 #  pv
+#  (macOS users can install with Homebrew: "brew install pv")
 #
-# Notes:
-#  only tested under Ubuntu 12.04
+# =======================================
+#
+# Verification:
+#  Tested on macOS Catalina 10.15.7
 #
 
 
@@ -152,7 +173,7 @@ function compare_checksum()
     echo "Modified:"    # the intersection
     comm -12 "$path/$DIFF_NAME.miss" "$path/$DIFF_NAME.new" | sed '/^$/d'
     echo "--------------"
-    echo "Missed:"      #in miss but not in new
+    echo "Missing:"      #in miss but not in new
     comm -2 "$path/$DIFF_NAME.miss" "$path/$DIFF_NAME.new" | cut -f 1 | sed '/^$/d'
     echo "--------------"
     echo "Added:"       #in new but not in miss
