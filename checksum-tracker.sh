@@ -12,23 +12,23 @@
 #
 # INSTRUCTIONS:
 # This script is designed to be simple and portable.
-# 
-# Simply place a copy of checksum-tracker.sh in the 
+#
+# Simply place a copy of checksum-tracker.sh in the
 # top/root level of any project folder or external drive.
 #
 # Then, allow execution with chmod +X checksum-tracker.sh
-# 
+#
 # To use, simply navigate your CLI/Terminal to the project
 # folder, and then execute locally with ./checksum-tracker.sh
-# 
+#
 # On the first run, this script will compute an md5 checksum
-# of all files in that directory recursively and save the 
+# of all files in that directory recursively and save the
 # results to a checksum file titled .dir_checksum
 #
 # Subsequent executions on that directory will compare
-# last checksum with current one, update the records, 
+# last checksum with current one, update the records,
 # and then report missing, added, and modified files.
-# Additionally, a copy of the previous checksum data is 
+# Additionally, a copy of the previous checksum data is
 # saved to .dir_checksum.old for backup purposes.
 #
 # =======================================
@@ -85,7 +85,7 @@ if [[ $PLATFORM == 'Linux' ]]; then
     SORT="sort --parallel=$PARALLEL_COUNT"
 elif [[ $PLATFORM == 'Darwin' ]]; then
     PARALLEL_COUNT=`sysctl hw.ncpu | cut -d: -f2`
-    MD5SUM="md5 -r"
+    MD5SUM="md5 -r | sed 's/ /  /'"
     CUT_FIELD=2
 fi
 
@@ -181,7 +181,7 @@ function compare_checksum()
     echo "--------------"
 
     # clean up tmp files
-    rm "$path/$DIFF_NAME"*
+    # rm "$path/$DIFF_NAME"*
 }
 
 
@@ -230,11 +230,5 @@ if [ -e "$checksum_path.old" ]; then
     # keep old copy for reference?
     #rm $checksum_path.old
 fi
-
-# progress example: (may work only in linux)
-#echo -ne '#####                     (33%)\r'; sleep 1
-#echo -ne '#############             (66%)\r'; sleep 1
-#echo -ne '#######################   (100%)\r'
-#echo -ne '\n'
 
 exit
