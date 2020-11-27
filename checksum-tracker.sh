@@ -85,7 +85,7 @@ if [[ $PLATFORM == 'Linux' ]]; then
     SORT="sort --parallel=$PARALLEL_COUNT"
 elif [[ $PLATFORM == 'Darwin' ]]; then
     PARALLEL_COUNT=`sysctl hw.ncpu | cut -d: -f2`
-    MD5SUM="md5 -r | sed 's/ /  /'"
+    MD5SUM="md5 -r"
     CUT_FIELD=2
 fi
 
@@ -100,7 +100,7 @@ function create_checksum()
 
     echo "Count files..."
     local count=`find -L "$path" ! -name $CHECKSUM_NAME ! -name $CHECKSUM_NAME.old \
-         -type f | wc -l`
+    ! -name .DS_Store ! -path "*/.stfolder/*" ! -path "*/.stversions/*" -type f | wc -l`
     echo "$count files found"
 
     # check pv existence
@@ -113,7 +113,7 @@ function create_checksum()
     echo "Computing checksum..."
     # the long pipeline of 'find | xargs md5sum | pv | sort'
     find -L "$path" ! -name $CHECKSUM_NAME ! -name $CHECKSUM_NAME.old ! -name .DS_Store \
-         -type f -print0 |                          #find every file under $path (follow symbolic links)
+         ! -path "*/.stfolder/*" ! -path "*/.stversions/*" -type f -print0 |   #find every file under $path (follow symbolic links)
         xargs -0 -n 1 -P $PARALLEL_COUNT $MD5SUM |  #create md5sum in parallel
         $PV_CMD |                                   #showing nice progress bar using pv
         $SORT -k 2 |                                #should sort or diff will fail badly
@@ -121,6 +121,12 @@ function create_checksum()
         #tee "$checksum"                            #save to checksume file and output to screen
 
     if [ $? -eq 0 ]; then
+
+        if [[ $PLATFORM == 'Darwin' ]]; then
+          sed -n 's/ /  /' $checksum
+          echo "INFO: Checksum tracker standardized for macOS-Linux intercompability."
+        fi
+
         echo "Done. Checksum file written to $checksum"
     else
         echo "Checksum creation failed. Exiting.."
@@ -181,7 +187,7 @@ function compare_checksum()
     echo "--------------"
 
     # clean up tmp files
-    # rm "$path/$DIFF_NAME"*
+    rm "$path/$DIFF_NAME"*
 }
 
 
