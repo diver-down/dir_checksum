@@ -123,7 +123,7 @@ function create_checksum()
     if [ $? -eq 0 ]; then
 
         if [[ $PLATFORM == 'Darwin' ]]; then
-          sed -n 's/ /  /' $checksum
+          sed -i '' -e 's/ /  /' $checksum #editing in-place first space to two spaces, " '' -e " for macOS strangeness
           echo "INFO: Checksum tracker standardized for macOS-Linux intercompability."
         fi
 
