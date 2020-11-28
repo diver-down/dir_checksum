@@ -14,7 +14,7 @@ This script is designed to be simple and portable.
 
 Simply place a copy of checksum-tracker.sh in the top/root level of any project folder or external drive.
 
-Then, allow execution with `chmod +X checksum-tracker.sh`
+Then, allow execution with `chmod +x checksum-tracker.sh`
 
 To use, simply navigate your CLI/Terminal to the project folder, and then execute locally with `./checksum-tracker.sh`
 
@@ -38,6 +38,6 @@ One of the main modifications of this script, compared to the original source, i
 (macOS users can install with Homebrew: `brew install pv`)
 
 ---
- 
+
 ## Tested on:
 - macOS Catalina 10.15.7

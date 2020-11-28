@@ -16,7 +16,7 @@
 # Simply place a copy of checksum-tracker.sh in the
 # top/root level of any project folder or external drive.
 #
-# Then, allow execution with chmod +X checksum-tracker.sh
+# Then, allow execution with chmod +x checksum-tracker.sh
 #
 # To use, simply navigate your CLI/Terminal to the project
 # folder, and then execute locally with ./checksum-tracker.sh
