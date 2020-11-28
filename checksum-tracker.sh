@@ -99,7 +99,7 @@ function create_checksum()
     local checksum=$2
 
     echo "Count files..."
-    local count=`find -L "$path" ! -name $CHECKSUM_NAME ! -name $CHECKSUM_NAME.old \
+    local count=`find -L "$path" ! -name $CHECKSUM_NAME ! -name $CHECKSUM_NAME.old ! -name .stignore \
     ! -name .DS_Store ! -path "*/.stfolder/*" ! -path "*/.stversions/*" -type f | wc -l`
     echo "$count files found"
 
@@ -112,7 +112,7 @@ function create_checksum()
 
     echo "Computing checksum..."
     # the long pipeline of 'find | xargs md5sum | pv | sort'
-    find -L "$path" ! -name $CHECKSUM_NAME ! -name $CHECKSUM_NAME.old ! -name .DS_Store \
+    find -L "$path" ! -name $CHECKSUM_NAME ! -name $CHECKSUM_NAME.old ! -name .DS_Store ! -name .stignore \
          ! -path "*/.stfolder/*" ! -path "*/.stversions/*" -type f -print0 |   #find every file under $path (follow symbolic links)
         xargs -0 -n 1 -P $PARALLEL_COUNT $MD5SUM |  #create md5sum in parallel
         $PV_CMD |                                   #showing nice progress bar using pv
