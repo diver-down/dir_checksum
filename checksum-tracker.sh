@@ -16,7 +16,7 @@
 # Simply place a copy of checksum-tracker.sh in the
 # top/root level of any project folder or external drive.
 #
-# Then, allow execution with chmod +x checksum-tracker.sh
+# Then, allow execution with chmod +X checksum-tracker.sh
 #
 # To use, simply navigate your CLI/Terminal to the project
 # folder, and then execute locally with ./checksum-tracker.sh
@@ -62,7 +62,7 @@
 # ==============
 
 # checksum filename (old checksum will have same filename with .old suffix)
-CHECKSUM_NAME=".dir_checksum"
+CHECKSUM_NAME=".checksums"
 
 # number of parallel process
 PARALLEL_COUNT=2
@@ -74,18 +74,24 @@ PLATFORM=`uname -s` #'Darwin' for mac, 'Linux' for linux
 MD5SUM="md5sum"
 
 # sort program
-SORT="sort --ignore-case"
+SORT="sort --ignore-case --dictionary-order"
 
 CUT_FIELD=3
+
+MODCOMM="comm"
 
 # platform specific
 if [[ $PLATFORM == 'Linux' ]]; then
     PARALLEL_COUNT=`grep -c ^processor /proc/cpuinfo`
     MD5SUM="md5sum"
-    SORT="sort --ignore-case --parallel=$PARALLEL_COUNT"
+    SORT="sort --ignore-case --dictionary-order --parallel=$PARALLEL_COUNT"
+    MODCOMM="comm --nocheck-order"
 elif [[ $PLATFORM == 'Darwin' ]]; then
     PARALLEL_COUNT=`sysctl hw.ncpu | cut -d: -f2`
     MD5SUM="md5 -r"
+    LC_COLLATE="cs_CZ.ISO8859-2"
+    echo "macOS Local for Sort set to: "$LC_COLLATE
+    SORT="sort --ignore-case --dictionary-order"
     CUT_FIELD=2
 fi
 
@@ -168,16 +174,17 @@ function compare_checksum()
     #   missed: test1
     #   added: test3
 
-    changes=`cut -d' ' -f$CUT_FIELD- "$path/$DIFF_NAME" | $SORT | uniq | wc -l`
     # grep - and + respectively into 2 sets (miss and new)
     sed -n '/^-/p' "$path/$DIFF_NAME" | cut -d' ' -f$CUT_FIELD- | $SORT > "$path/$DIFF_NAME.miss"
     sed -n '/^+/p' "$path/$DIFF_NAME" | cut -d' ' -f$CUT_FIELD- | $SORT > "$path/$DIFF_NAME.new"
+    sed -n '/^-/p' "$path/$DIFF_NAME" | $SORT -k 2 | cut -c 2- > "$path/$DIFF_NAME.mod1"
+    sed -n '/^+/p' "$path/$DIFF_NAME" | $SORT -k 2 | cut -c 2- > "$path/$DIFF_NAME.mod2"
 
     echo "=== Report ==="
-    echo "File changed: $changes"
-    echo
-    echo "Modified:"    # the intersection
-    comm -12 "$path/$DIFF_NAME.miss" "$path/$DIFF_NAME.new" | sed '/^$/d'
+    echo "Modified (with new MD5):"    # the intersection
+    awk -F'  ' 'NR==FNR{++a[$2];next} $2 in a' "$path/$DIFF_NAME.mod1" "$path/$DIFF_NAME.mod2" | $SORT -k 2 > "$path/$DIFF_NAME.first.dat"
+    awk -F'  ' 'NR==FNR{++a[$2];next} $2 in a' "$path/$DIFF_NAME.mod2" "$path/$DIFF_NAME.mod1" | $SORT -k 2 > "$path/$DIFF_NAME.second.dat"
+    $MODCOMM -13 "$path/$DIFF_NAME.second.dat" "$path/$DIFF_NAME.first.dat" | sed '/^$/d'
     echo "--------------"
     echo "Missing:"      #in miss but not in new
     comm -2 "$path/$DIFF_NAME.miss" "$path/$DIFF_NAME.new" | cut -f 1 | sed '/^$/d'
