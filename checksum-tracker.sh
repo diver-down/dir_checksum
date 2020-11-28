@@ -89,8 +89,6 @@ if [[ $PLATFORM == 'Linux' ]]; then
 elif [[ $PLATFORM == 'Darwin' ]]; then
     PARALLEL_COUNT=`sysctl hw.ncpu | cut -d: -f2`
     MD5SUM="md5 -r"
-    LC_COLLATE="cs_CZ.ISO8859-2"
-    echo "macOS Local for Sort set to: "$LC_COLLATE
     SORT="sort --ignore-case --dictionary-order"
     CUT_FIELD=2
 fi
@@ -104,7 +102,7 @@ function create_checksum()
     local path=$1
     local checksum=$2
 
-    echo "Count files..."
+    echo "Counting files..."
     local count=`find -L "$path" ! -name $CHECKSUM_NAME ! -name $CHECKSUM_NAME.old ! -name .stignore \
     ! -name .DS_Store ! -path "*/.stfolder/*" ! -path "*/.stversions/*" -type f | wc -l`
     echo "$count files found"
@@ -116,7 +114,7 @@ function create_checksum()
         local PV_CMD="cat" #bypassing
     fi
 
-    echo "Computing checksum..."
+    echo "Computing checksums..."
     # the long pipeline of 'find | xargs md5sum | pv | sort'
     find -L "$path" ! -name $CHECKSUM_NAME ! -name $CHECKSUM_NAME.old ! -name .DS_Store ! -name .stignore \
          ! -path "*/.stfolder/*" ! -path "*/.stversions/*" -type f -print0 |   #find every file under $path (follow symbolic links)
@@ -130,10 +128,10 @@ function create_checksum()
 
         if [[ $PLATFORM == 'Darwin' ]]; then
           sed -i '' -e 's/ /  /' $checksum #editing in-place first space to two spaces, " '' -e " for macOS strangeness
-          echo "INFO: Checksum tracker standardized for macOS-Linux intercompability."
+          echo "INFO: Checksum tracker reformatted for macOS-Linux intercompability."
         fi
 
-        echo "Done. Checksum file written to $checksum"
+        echo "DONE: Checksum file written to $checksum"
     else
         echo "Checksum creation failed. Exiting.."
         exit 1
@@ -181,15 +179,15 @@ function compare_checksum()
     sed -n '/^+/p' "$path/$DIFF_NAME" | $SORT -k 2 | cut -c 2- > "$path/$DIFF_NAME.mod2"
 
     echo "=== Report ==="
-    echo "Modified (with new MD5):"    # the intersection
+    echo "Modified Files, with new MD5:"    # the intersection
     awk -F'  ' 'NR==FNR{++a[$2];next} $2 in a' "$path/$DIFF_NAME.mod1" "$path/$DIFF_NAME.mod2" | $SORT -k 2 > "$path/$DIFF_NAME.first.dat"
     awk -F'  ' 'NR==FNR{++a[$2];next} $2 in a' "$path/$DIFF_NAME.mod2" "$path/$DIFF_NAME.mod1" | $SORT -k 2 > "$path/$DIFF_NAME.second.dat"
     $MODCOMM -13 "$path/$DIFF_NAME.second.dat" "$path/$DIFF_NAME.first.dat" | sed '/^$/d'
     echo "--------------"
-    echo "Missing:"      #in miss but not in new
+    echo "Removed or Missing Files:"      #in miss but not in new
     comm -2 "$path/$DIFF_NAME.miss" "$path/$DIFF_NAME.new" | cut -f 1 | sed '/^$/d'
     echo "--------------"
-    echo "Added:"       #in new but not in miss
+    echo "New Files:"       #in new but not in miss
     comm -2 "$path/$DIFF_NAME.new" "$path/$DIFF_NAME.miss" | cut -f 1 | sed '/^$/d'
     echo "--------------"
 
