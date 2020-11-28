@@ -74,7 +74,7 @@ PLATFORM=`uname -s` #'Darwin' for mac, 'Linux' for linux
 MD5SUM="md5sum"
 
 # sort program
-SORT="sort"
+SORT="sort --ignore-case"
 
 CUT_FIELD=3
 
@@ -82,7 +82,7 @@ CUT_FIELD=3
 if [[ $PLATFORM == 'Linux' ]]; then
     PARALLEL_COUNT=`grep -c ^processor /proc/cpuinfo`
     MD5SUM="md5sum"
-    SORT="sort --parallel=$PARALLEL_COUNT"
+    SORT="sort --ignore-case --parallel=$PARALLEL_COUNT"
 elif [[ $PLATFORM == 'Darwin' ]]; then
     PARALLEL_COUNT=`sysctl hw.ncpu | cut -d: -f2`
     MD5SUM="md5 -r"
