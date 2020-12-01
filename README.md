@@ -4,8 +4,8 @@ Checksum Tracker (`checksum-tracker.sh`) is a directory verification bash shell 
 ---
 
 ## Authors
-- This forked version and modifications are by diver-down.
-- Original credit goes to Mark Kuo (starryalley@gmail.com), found at https://github.com/starryalley/dir_checksum
+- This forked codebase version and modifications are by C.D. @ https://github.com/scuba-tech/checksum-tracker
+- First derivation credit and idea goes to Mark Kuo (starryalley@gmail.com), found at https://github.com/starryalley/dir_checksum
 
 ---
 
