@@ -1,5 +1,7 @@
 # Checksum Tracker
-Checksum Tracker (`checksum-tracker.sh`) is a directory verification bash shell script used to compute a recursive directory (folder) checksum and output change information each time it is ran.
+Ever had a file silently corrupt and propagate to back up? Checksumming prevents that. Checksum Tracker (`checksum-tracker.sh`) is a directory verification bash shell script used to compute a recursive directory (folder) checksum and output change information each time it is ran.
+
+Instead of running automatically and at a block-level (like BTRFS, ZFS, etc), this utility is ran manually at the file-level. This allows protection of assets in environments that must be portable and compatible with OSs that don't support checksumming filesystems, as well as gives a way to quickly audit shared volumes for visibility on team member changes and updates.
 
 ---
 
