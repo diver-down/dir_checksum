@@ -1,7 +1,9 @@
 # Checksum Tracker
-Ever had a file silently corrupt and propagate to back up? Checksumming prevents that. Checksum Tracker (`checksum-tracker.sh`) is a directory verification bash shell script used to compute a recursive directory (folder) checksum and output change information each time it is ran.
+Ever had a file silently corrupt and propagate to backup? It's a horrible feeling, no matter the scope... and even worse when the data genuinely mattered. This phenomenon is known as *bit-rot* and affects everything from HDDs to SSDs, and even data in non-ECC RAM. Checksumming prevents it — well, more specifically, checksumming detects nearly all bit-rot and can either fix the issue or warn the user so they can manually restore.
 
-Instead of running automatically and at a block-level (like BTRFS, ZFS, etc), this utility is ran manually at the file-level. This allows protection of assets in environments that must be portable and compatible with OSs that don't support checksumming filesystems, as well as gives a way to quickly audit shared volumes for visibility on team member changes and updates.
+**Checksum Tracker** (`checksum-tracker.sh`) is a directory verification bash shell script used to compute a recursive directory (folder) checksum, and output change information each time it is ran. In essence; it does the thing (Zhu Li)
+
+Instead of running automatically and at a block-level (like BTRFS, ZFS, etc), this utility is ran manually at the file-level. This allows protection of assets in environments that must be portable and compatible with OSs that don't support checksumming filesystems, as well as gives a way to quickly audit shared volumes for visibility on team member changes and updates. It's also a great way to verify external drives and backup stores before pulling/copying/restoring files.
 
 ---
 
