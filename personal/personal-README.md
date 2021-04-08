@@ -1,6 +1,6 @@
 # personal scripts
 
-**HEY THERE! There's no need for you (The lively end-user) to keep this folder.** 
+**HEY THERE! There's no need for you (the lovely end-user) to keep this folder. Same for the `../archived` folder, come to think of it.** 
 
 These are just some quick scripts I've written to implement `checksum-tracker` in our org's transfer and backup strategy.
 
