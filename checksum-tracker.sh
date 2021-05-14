@@ -62,7 +62,7 @@
 # ==============
 
 # checksum filename (old checksum will have same filename with .old suffix)
-CHECKSUM_NAME=".checksums"
+CHECKSUM_NAME="checksums"
 
 # number of parallel process
 PARALLEL_COUNT=2
