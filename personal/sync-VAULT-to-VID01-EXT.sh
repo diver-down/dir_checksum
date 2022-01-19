@@ -30,6 +30,14 @@ echo " "
 echo " "
 
 cd /mnt/VAULT/Production-Archive
+
+if [ ! -x "checksum-tracker.sh" ]; 
+then
+echo "  > ABORTING <      ERROR: checksum-tracker.sh (or chmod +x) does NOT exist in directory: " && pwd && exit 2
+else
+echo "checksum-tracker.sh found with good permissions, continuing..."
+fi
+
 echo " "
 echo "Cleaning OS metafiles:"
 pwd
@@ -50,7 +58,19 @@ pwd
 ./checksum-tracker.sh
 echo " "
 echo " "
+
+
+
+
 cd /mnt/VAULT/New-Jersey-Shipwrecks
+
+if [ ! -x "checksum-tracker.sh" ]; 
+then
+echo "  > ABORTING <      ERROR: checksum-tracker.sh (or chmod +x) does NOT exist in directory: " && pwd && exit 2
+else
+echo "checksum-tracker.sh found with good permissions, continuing..."
+fi
+
 
 echo " "
 echo "Cleaning OS metafiles:"
@@ -118,6 +138,13 @@ echo " "
 
 cd /run/media/user/VID01/Production-Archive
 
+if [ ! -x "checksum-tracker.sh" ]; 
+then
+echo "  > ABORTING <      ERROR: checksum-tracker.sh (or chmod +x) does NOT exist in directory: " && pwd && exit 2
+else
+echo "checksum-tracker.sh found with good permissions, continuing..."
+fi
+
 echo " "
 echo "Cleaning OS metafiles:"
 pwd
@@ -137,7 +164,16 @@ echo "Checksumming:"
 pwd
 ./checksum-tracker.sh
 echo "====================================================="
+
+
 cd /run/media/user/VID01/New-Jersey-Shipwrecks
+
+if [ ! -x "checksum-tracker.sh" ]; 
+then
+echo "  > ABORTING <      ERROR: checksum-tracker.sh (or chmod +x) does NOT exist in directory: " && pwd && exit 2
+else
+echo "checksum-tracker.sh found with good permissions, continuing..."
+fi
 
 echo " "
 echo "Cleaning OS metafiles:"
