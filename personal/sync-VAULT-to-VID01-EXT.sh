@@ -5,6 +5,11 @@
 # NOTE: this script *syncs* all changes from VID01 to BKP01-EXT
 #       (deletions are propagated)
 
+pause(){
+ while read -r -t 0.001; do :; done # dump the buffer
+ read -n1 -rsp $'\n\n   Press any key to continue, or Ctrl+C to exit...\n'
+}
+
 echo " "
 echo " "
 echo "====================================================="
@@ -25,9 +30,9 @@ echo " "
 echo " "
 
 cd /mnt/VAULT/Production-Archive
-pwd
 echo " "
-echo "Cleaning OS metafiles"
+echo "Cleaning OS metafiles:"
+pwd
 echo " "
 find . -name '.DS_Store' -print
 find . -name '.DS_Store' -delete
@@ -40,15 +45,16 @@ find . -name 'Desktop.ini' -delete
 find . -name 'desktop.ini' -print
 find . -name 'desktop.ini' -delete
 echo " "
-echo "Checksumming..."
+echo "Checksumming:"
 pwd
 ./checksum-tracker.sh
 echo " "
 echo " "
 cd /mnt/VAULT/New-Jersey-Shipwrecks
-pwd
+
 echo " "
-echo "Cleaning OS metafiles"
+echo "Cleaning OS metafiles:"
+pwd
 echo " "
 find . -name '.DS_Store' -print
 find . -name '.DS_Store' -delete
@@ -61,7 +67,7 @@ find . -name 'Desktop.ini' -delete
 find . -name 'desktop.ini' -print
 find . -name 'desktop.ini' -delete
 echo " "
-echo "Checksumming..."
+echo "Checksumming:"
 pwd
 ./checksum-tracker.sh
 echo " "
@@ -75,6 +81,8 @@ echo " "
 
 cd ~
 
+pause
+
 echo " "
 echo " "
 echo "====================================================="
@@ -82,12 +90,15 @@ echo "         Syncing VAULT to VID01-EXT now              "
 echo "====================================================="
 echo " "
 echo " "
+echo "RSYNC:  NJ Shipwrecks"
+rsync -vrltDhiq --progress --stats --delete /mnt/VAULT/New-Jersey-Shipwrecks/ /run/media/user/VID01/New-Jersey-Shipwrecks/
+echo "====================================================="
 
-rsync -vrltDhi --progress --stats --delete /mnt/VAULT/New-Jersey-Shipwrecks /run/media/user/VID01/New-Jersey-Shipwrecks/
+pause
+
 echo "====================================================="
-echo "====================================================="
-echo "====================================================="
-rsync -vrltDhi --progress  --stats --delete /Volumes/VID01/Production-Archive/ /run/media/user/VID01/Production-Archive/
+echo "RSYNC: Production Archive "
+rsync -vrltDhiq --progress  --stats --delete /mnt/VAULT/Production-Archive/ /run/media/user/VID01/Production-Archive/
 
 echo " "
 echo " "
@@ -96,7 +107,7 @@ echo "                  Synchronized             "
 echo "====================================================="
 echo " "
 echo " "
-echo "====================================================="
+pause
 echo " "
 echo " "
 echo "====================================================="
@@ -106,9 +117,10 @@ echo " "
 echo " "
 
 cd /run/media/user/VID01/Production-Archive
-pwd
+
 echo " "
-echo "Cleaning OS metafiles"
+echo "Cleaning OS metafiles:"
+pwd
 echo " "
 find . -name '.DS_Store' -print
 find . -name '.DS_Store' -delete
@@ -121,14 +133,15 @@ find . -name 'Desktop.ini' -delete
 find . -name 'desktop.ini' -print
 find . -name 'desktop.ini' -delete
 echo " "
-echo "Checksumming..."
+echo "Checksumming:"
 pwd
 ./checksum-tracker.sh
 echo "====================================================="
 cd /run/media/user/VID01/New-Jersey-Shipwrecks
-pwd
+
 echo " "
-echo "Cleaning OS metafiles"
+echo "Cleaning OS metafiles:"
+pwd
 echo " "
 find . -name '.DS_Store' -print
 find . -name '.DS_Store' -delete
