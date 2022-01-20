@@ -1,17 +1,11 @@
 #!/bin/bash
-#
-#
-#
-# NOTE: this script *syncs* all changes from VID01 to BKP01-EXT
-#       (deletions are propagated)
-
 
 # REMINDER: Be sure to include the trailing slash in paths (for contents):
 source1="/Volumes/VID01/New-Jersey-Shipwrecks/"
-dest1="/Volumes/xxxxxxxxx/New-Jersey-Shipwrecks/"
+dest1="/Volumes/BKP02-MAN/New-Jersey-Shipwrecks/"
 
 source2="/Volumes/VID01/Production-Archive/"
-dest2="/Volumes/xxxxxxxxxxx/Production-Archive/"
+dest2="/Volumes/BKP02-MAN/Production-Archive/"
 
 pause(){
  while read -r -t 0.001; do :; done # dump the buffer
