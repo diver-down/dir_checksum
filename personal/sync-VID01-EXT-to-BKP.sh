@@ -120,14 +120,14 @@ echo "====================================================="
 echo " "
 echo " "
 echo "RSYNC:  $source1   to   $dest1"
-rsync -vrltDhiq --progress --stats --delete "$source1" "$dest1"
+rsync -vrltDhi --progress --stats --delete "$source1" "$dest1"
 echo "====================================================="
-
+echo "1/2 sync complete, please review results above."
 pause
 
 echo "====================================================="
 echo "RSYNC:  $source2   to   $dest2"
-rsync -vrltDhiq --progress  --stats --delete "$source2" "$dest2"
+rsync -vrltDhi --progress  --stats --delete "$source2" "$dest2"
 
 echo " "
 echo " "
